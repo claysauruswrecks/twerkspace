@@ -28,12 +28,21 @@ class MUDServer:
             if command == "quit":
                 break
 
-            logging.debug("Processing command.")
-            response = interpreter.process_command(command)
-            logging.debug(f"Encoding: {response}")
-            encoded_response = response.encode() + b"\n"
-            logging.debug("Sending response.")
-            print(encoded_response)
+            try:
+                logging.debug("Processing command.")
+                if len(command.split(" ", 1)) == 1:
+                    args = None
+                else:
+                    command, args = command.split(" ", 1)
+                response = interpreter.process_command(command, args)
+                logging.debug(f"Encoding: {response}")
+                encoded_response = response.encode() + b"\n"
+                logging.debug("Sending response.")
+                print(encoded_response)
+            except Exception as e:
+                logging.error(f"Error processing command: {e}")
+                response = {"error": str(e)}
+                encoded_response = response.encode() + b"\n"
             writer.write(encoded_response)
             await writer.drain()
 

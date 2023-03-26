@@ -10,7 +10,7 @@ class World:
         self.room = config["room"]
         self.users = {}
         # TODO: support multiple objects
-        self.objects = config["object"] or []
+        self.objects = config["objects"] or []
         logging.info(f"Created world {self.id}")
 
     def parse_element(element_type, input_string):
@@ -54,4 +54,10 @@ class World:
 
     def display_objects(self):
         logging.debug(f"Displaying objects {self.objects}")
-        return self.objects
+        # Return list of objects by keys
+        return list(self.objects.keys())
+
+    def get_object(self, object_id):
+        logging.debug(f"Getting object {object_id}")
+        # Return object from dict by id
+        return self.objects[object_id]
