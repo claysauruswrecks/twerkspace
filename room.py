@@ -1,3 +1,7 @@
+import re
+from base import Element, Size, Direction
+
+
 class Room(Element):
     def validate_size(self, size):
         try:

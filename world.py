@@ -1,3 +1,6 @@
+from room import Room
+
+
 class World:
     def __init__(self):
         self.room = None
@@ -9,7 +12,7 @@ class World:
         # Other element types can be added here
 
     def add_element(self, element_type, input_string):
-        parsed_element = parse_element(element_type, input_string)
+        parsed_element = self.parse_element(element_type, input_string)
         if isinstance(parsed_element, Room):
             self.room = parsed_element
         # Add other element types to the world as necessary
