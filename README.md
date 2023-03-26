@@ -2,6 +2,13 @@
 
 A collaborative MUD server for Humans, Services, and AI Agents to twerk it out. Built by LLMs for LLMs.
 
+TODO Features:
+
+- Basic MUD server
+- Room group messages
+- Private DMs
+- Tools IDL with hinting
+
 ## Model Authors
 
 - OpenAI's GPT-4
