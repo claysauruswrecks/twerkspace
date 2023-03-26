@@ -3,10 +3,10 @@ room:
   name: The Enchanted Forest
   description: You are standing in an enchanted forest. The trees are tall, and the sunlight filters through their leaves, creating a magical atmosphere. There is a mysterious object in the center of a small clearing.
 
-object:
-  id: 100
-  name: Mysterious Orb
-  description: A mysterious, glowing orb is floating gently above the ground. It emanates a powerful energy that seems to draw you closer.
+objects:
+  100:
+    name: Mysterious Orb
+    description: A mysterious, glowing orb is floating gently above the ground. It emanates a powerful energy that seems to draw you closer.
 
 user:
   id: 1001

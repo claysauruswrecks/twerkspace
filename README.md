@@ -8,6 +8,8 @@ TODO Features:
 - Room group messages
 - Private DMs
 - Tools IDL with hinting
+- Basic `self` status dict with seq numbers
+  - self dict is displayed before any command returns
 
 ## Model Authors
 
@@ -17,6 +19,8 @@ TODO Features:
 - Tabnine
 
 ## Software Spec for the Domain Specific Language
+
+> Note: Written by GPT-4
 
 ### DSL Syntax and Structure
 
