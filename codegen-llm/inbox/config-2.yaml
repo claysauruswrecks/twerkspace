@@ -1,0 +1,13 @@
+room:
+  id: 2
+  name: The Ancient Library
+  description: You find yourself in a vast, ancient library. The shelves are filled with dusty tomes, and the air is thick with the scent of old parchment. A strange artifact is displayed prominently on a pedestal.
+
+object:
+  id: 101
+  name: Ancient Artifact
+  description: The ancient artifact appears to be a small, intricately carved stone tablet. It hums with a mysterious power, as if waiting for someone to unlock its secrets.
+
+user:
+  id: 1002
+  name: Bob
