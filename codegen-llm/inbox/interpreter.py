@@ -11,6 +11,7 @@ class Interpreter:
         print(
             f"Users present: {', '.join([str(u) for u in self.world.users.values()])}"
         )
+        self.world.display_objects()
 
     def process_command(self, command):
         if command in self.commands:
