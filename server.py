@@ -1,5 +1,8 @@
 import asyncio
 
+from interpreter import Interpreter
+from user import User
+
 
 class MUDServer:
     def __init__(self, world):
