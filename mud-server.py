@@ -1,5 +1,6 @@
 import asyncio
 
+
 class MUDServer:
     def __init__(self, world):
         self.world = world
