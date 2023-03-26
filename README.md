@@ -11,7 +11,9 @@ TODO Features:
 
 ## Model Authors
 
-- OpenAI's GPT-4
+- OpenAI
+  - GPT-4
+  - GPT-3.5
 - Tabnine
 
 ## Software Spec for the Domain Specific Language
