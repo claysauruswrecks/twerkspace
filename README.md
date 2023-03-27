@@ -2,14 +2,16 @@
 
 A collaborative MUD server for Humans, Services, and AI Agents to twerk it out. Built by LLMs for LLMs.
 
+Features:
+
+- Basic `self` status dict with seq numbers
+
 TODO Features:
 
 - Basic MUD server
 - Room group messages
 - Private DMs
 - Tools IDL with hinting
-- Basic `self` status dict with seq numbers
-  - self dict is displayed before any command returns
 
 ## Model Authors
 
