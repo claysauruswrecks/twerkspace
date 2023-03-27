@@ -14,6 +14,9 @@ class MUDServer:
         self.world = world
 
     async def handle_connection(self, reader, writer):
+        logging.info(
+            "New connection from {}".format(writer.get_extra_info("peername"))
+        )
         user_id = writer.transport.get_extra_info("peername")
         user = User(user_id, f"User_{len(self.world.users) + 1}")
         self.world.add_user(user_id, user)

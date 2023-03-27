@@ -9,6 +9,8 @@ class World:
         self.id = uuid4()
         self.room = config["room"]
         self.users = {}
+        self.users_by_name = {}
+        self.messages = []
         # TODO: support multiple objects
         self.objects = config["objects"] or []
         logging.info(f"Created world {self.id}")
@@ -28,6 +30,19 @@ class World:
             self.room = parsed_element
         # Add other element types to the world as necessary
 
+    # Broadcast a message by adding it to the messages list
+    def broadcast_message(self, from_user, message):
+        logging.debug(f"Broadcasting message {from_user}")
+        self.messages.append(f"{from_user}: {message}")
+
+    def send_message(self, from_user, to_user, message):
+        logging.debug(f"Sending message from {from_user} to {to_user}")
+        self.users_by_name[to_user].send_message(from_user, message)
+
+    def display_messages(self):
+        logging.debug(f"Displaying messages {self.messages}")
+        return self.messages
+
     def display_room(self):
         logging.debug(f"Displaying room {self.room}")
         return self.room
@@ -35,9 +50,12 @@ class World:
     def add_user(self, user_id, user):
         logging.debug(f"Adding user {user_id}")
         self.users[user_id] = user
+        self.users_by_name[user.name.lower()] = user
 
     def remove_user(self, user_id):
         logging.debug(f"Removing user {user_id}")
+        user = self.users[user_id]
+        del self.users_by_name[user.name.lower()]
         del self.users[user_id]
 
     def set_room(self, room):

@@ -11,6 +11,8 @@ class Interpreter:
             "look": self.look,
             "inspect": self.inspect,
             "protocol_connect": self.protocol_connect,
+            "say": self.say,
+            "whisper": self.whisper,
         }
         self.commands_help = {
             "look": "Look around the room",
@@ -31,6 +33,19 @@ class Interpreter:
             f"Interpreter created: {self.world.id}:{self.user}:{self.commands.keys()}"
         )
 
+    def whisper(self, args):
+        to_user, message = args.split(" ", 1)
+        logging.debug(f"Whispering {self.user.name} => {to_user}: {message}")
+        self.world.send_message(self.user.name, to_user, message)
+
+    def say(self, args):
+        message = args
+        logging.debug(
+            f"Sending message {self.user.name} => {self.world.id}: {message}"
+        )
+        self.world.broadcast_message(self.user.name, message)
+        logging.debug("Done sending message")
+
     def protocol_connect(self, args=None):
         logging.debug("Sending connection prompt")
         response = self.return_prompt("protocol_connect")
@@ -39,7 +54,7 @@ class Interpreter:
 
     def return_prompt(self, prompt_id):
         logging.debug(f"Returning prompt: {prompt_id}")
-        with open(f"prompts/{prompt_id}.json", "r") as f:
+        with open(f"prompts/GPT-3.5/protocol/{prompt_id}.json", "r") as f:
             response = json.load(f)
         logging.debug("Done returning prompt")
         return response
@@ -73,6 +88,7 @@ class Interpreter:
             response["user_ids"] = [u.name for u in self.world.users.values()]
             logging.debug("Looking for objects")
             response["object_ids"] = self.world.display_objects()
+            response["messages"] = self.world.display_messages()
         except Exception as e:
             logging.error(e)
             response["error"] = str(e)
@@ -87,6 +103,8 @@ class Interpreter:
             if command in self.commands:
                 logging.info(f"Executing command: {command}")
                 response = self.commands[command](args)
+                if response is None:
+                    response = self.look()
             else:
                 logging.info(f"Unknown command: {command}")
                 return json.dumps({"error": "Unknown command"})

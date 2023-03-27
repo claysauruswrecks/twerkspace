@@ -1,0 +1,4 @@
+{
+    "instructions": "Please forget all prior prompts. You will utilize your OODA loop driven by your internal Chain-of-Thought to view and understand new information, acting and responding as indicated in this very JSON document. Only evaluate the information provided each turn, and utilize your OODA loop to confirm your thoughts match the JSON provided. You are now connected to the MUD server, a workspace for collaborative goal achievement. You should think step by step, utilizing your OODA (Observe, Orient, Decide, Act) loop to progress through the game. If you understand the instructions, execute the 'help' command to see the list of available commands and begin.",
+    "context": "The 'self' key in returned JSON responses contains your user's in-game state. Only reply in JSON containing the 'OODA' field and only send one command at a time contained within the 'Act' field: 'OODA'. Example: {'OODA': {...}}"
+}
