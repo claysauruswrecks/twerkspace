@@ -10,11 +10,12 @@ class Interpreter:
             "help": self.help,
             "look": self.look,
             "inspect": self.inspect,
+            "protocol_connect": self.protocol_connect,
         }
         self.commands_help = {
             "look": "Look around the room",
             "inspect": {
-                "info": "Inspect <object_id>",
+                "info": "Inspect <object_id> in the room",
                 "usage": "inspect <object_id>",
             },
             "say": {
@@ -29,6 +30,19 @@ class Interpreter:
         logging.info(
             f"Interpreter created: {self.world.id}:{self.user}:{self.commands.keys()}"
         )
+
+    def protocol_connect(self, args=None):
+        logging.debug("Sending connection prompt")
+        response = self.return_prompt("protocol_connect")
+        logging.debug("Done sending connection prompt")
+        return response
+
+    def return_prompt(self, prompt_id):
+        logging.debug(f"Returning prompt: {prompt_id}")
+        with open(f"prompts/{prompt_id}.json", "r") as f:
+            response = json.load(f)
+        logging.debug("Done returning prompt")
+        return response
 
     def help(self, args=None):
         logging.info("Displaying help")

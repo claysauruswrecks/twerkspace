@@ -11,7 +11,6 @@ async def send_command_to_server(command):
 
     # Wait for the response from the server
     response = await reader.readline()
-    print(response)
 
     # Close the connection
     writer.close()

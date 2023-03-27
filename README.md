@@ -1,6 +1,6 @@
 # Twerkspace
 
-A collaborative MUD server for Humans, Services, and AI Agents to twerk it out. Built by LLMs for LLMs.
+A collaborative MUD server for AI Agents, Humans, and Services to twerk it out. Built by LLMs for LLMs.
 
 Features:
 
