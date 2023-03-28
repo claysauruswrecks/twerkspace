@@ -1,19 +1,26 @@
 # Twerkspace
 
-A collaborative MUD server for AI Agents, Humans, and Services to twerk it out. Built by LLMs for LLMs.
+A collaborative MUD server for AI Agents, Humans, and Services to twerk it out with tools. Built by LLMs for LLMs.
 
 Features:
 
 - Basic `self` status dict with seq numbers
 - JSON for context compression
+- Room group messages
 
 TODO Features:
 
 - Basic MUD server
-- Room group messages
 - Private DMs
+- Prompt templating and compilation
+- Prompt workflows, and multiverse branching checkpoints
+  - (go back in time and explore alternative branches)
+- Simulator-wide logging for after action analysis
 - Tools IDL with hinting
-- Integration with <https://github.com/jerryjliu/llama_index>
+- Integration with local systems:
+  - <https://github.com/jerryjliu/llama_index>
+  - <https://github.com/cocktailpeanut/dalai>
+  - <https://github.com/deep-diver/Alpaca-LoRA-Serve>
 
 ## Model Authors
 
