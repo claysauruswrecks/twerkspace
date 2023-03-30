@@ -2,6 +2,8 @@ import logging
 import sys
 import unittest
 
+log = logging.getLogger(__name__)
+
 if __name__ == "__main__":
     if "--debug" in sys.argv:
         logging.basicConfig(level=logging.DEBUG)

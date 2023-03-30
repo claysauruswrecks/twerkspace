@@ -9,27 +9,26 @@ from app.user import User
 from app.world import World
 from app import settings
 
+log = logging.getLogger(__name__)
+
 
 class MUDServer:
     def __init__(self, world):
         self.world = world
 
     def handle_command(self, user_id, command, args=None):
-        try:
+        if not user_id:
+            user = User(user_id, f"User_{len(self.world.users) + 1}")
+            self.world.add_user(user_id, user)
+        else:
             user = self.world.get_user(user_id)
-            if not user:
-                user = User(user_id, f"User_{len(self.world.users) + 1}")
-                self.world.add_user(user_id, user)
-            interpreter = Interpreter(self.world, user)
-            return interpreter.process_command(command, args)
-        except Exception as e:
-            logging.error(f"Error processing command: {e}")
-            return {"error": str(e)}
+        interpreter = Interpreter(self.world, user)
+        return interpreter.process_command(command, args)
 
 
 def load_config(config_path):
     # Load the configuration
-    logging.info(f"Loading config from {root_dir}]{config_path}")
+    log.info(f"Loading config from {root_dir}]{config_path}")
     with open(config_path, "r") as config_file:
         config = yaml.safe_load(config_file)
     return config
@@ -49,17 +48,17 @@ def create_app(config=None):
     @app.route("/command", methods=["POST"])
     def command():
         data = request.get_json()
-        user_id = data["user_id"]
+        user_id = data.get("user_id")
         command = data["command"]
         args = data.get("args", None)
 
         try:
             response = g.server.handle_command(user_id, command, args)
         except Exception as e:
-            logging.error(f"Error processing command: {e}")
+            log.error(f"Error processing command: {e}")
             response = {"error": str(e)}
 
-        return jsonify(response)
+        return response
 
     return app
 
@@ -92,12 +91,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Setup logging
-    numeric_level = getattr(logging, args.log.upper(), None)
+    numeric_level = getattr(log, args.log.upper(), None)
     if not isinstance(numeric_level, int):
         raise ValueError("Invalid log level: %s" % args.log)
-    logging.basicConfig(level=numeric_level)
+    log.basicConfig(level=numeric_level)
 
     # Execute the chosen command with the specified options
     if args.command == "start":
-        logging.info("Starting MUD server...")
+        log.info("Starting MUD server...")
         main(args)
