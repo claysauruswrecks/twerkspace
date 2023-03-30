@@ -1,6 +1,6 @@
 import re
 
-from base import Direction, Element, Size
+from .base import Direction, Element, Size
 
 
 class Room(Element):

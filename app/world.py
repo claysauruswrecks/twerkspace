@@ -1,18 +1,17 @@
 import logging
 from uuid import uuid4
 
-from room import Room
+from .room import Room
 
 
 class World:
-    def __init__(self, config):
+    def __init__(self, initial_room, initial_objects=None):
         self.id = uuid4()
-        self.room = config["room"]
+        self.room = initial_room
         self.users = {}
         self.users_by_name = {}
         self.messages = []
-        # TODO: support multiple objects
-        self.objects = config["objects"] or []
+        self.objects = initial_objects or []
         logging.info(f"Created world {self.id}")
 
     def parse_element(element_type, input_string):
@@ -51,6 +50,10 @@ class World:
         logging.debug(f"Adding user {user_id}")
         self.users[user_id] = user
         self.users_by_name[user.name.lower()] = user
+
+    def get_user(self, user_id):
+        logging.debug(f"Getting user {user_id}")
+        return self.users.get(user_id)
 
     def remove_user(self, user_id):
         logging.debug(f"Removing user {user_id}")

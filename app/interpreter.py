@@ -1,5 +1,6 @@
 import json
 import logging
+from app import settings
 
 
 class Interpreter:
@@ -54,7 +55,10 @@ class Interpreter:
 
     def return_prompt(self, prompt_id):
         logging.debug(f"Returning prompt: {prompt_id}")
-        with open(f"prompts/GPT-3.5/protocol/{prompt_id}.json", "r") as f:
+        with open(
+            f"{settings.PROMPT_PATH}/{settings.PROTOCOL}/protocol/{prompt_id}.json",
+            "r",
+        ) as f:
             response = json.load(f)
         logging.debug("Done returning prompt")
         return response
