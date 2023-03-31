@@ -1,28 +1,26 @@
-import logging
-import redis
-from uuid import uuid4
 import json
+import logging
+from uuid import uuid4
 
-from .room import Room
+import redis
+from flask import g
+
 from . import settings
+from .room import Room
 
 log = logging.getLogger(__name__)
 
 
 class World:
-    def __init__(self, config):
+    def __init__(self, config, r):
         self.id = str(config.get("world_id") or uuid4())
         # self.users = {}
         # self.users_by_name = {}
         # self.messages = []
         # self.objects = initial_objects or []
         # connect to redis
-        self.redis = redis.StrictRedis(
-            host=settings.REDIS_HOST,
-            port=settings.REDIS_PORT,
-            db=0,
-            decode_responses=True,
-        )
+        self.redis = r
+
         log.info(
             f"Connected to redis {settings.REDIS_HOST}:{settings.REDIS_PORT}:{self.redis.ping()}"
         )

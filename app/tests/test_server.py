@@ -1,10 +1,12 @@
-import redis
 import json
-import unittest
 import logging
-from app.server import create_app
-from app import settings
+import unittest
 from uuid import uuid4
+
+import redis
+
+from app import settings
+from app.server import create_app
 
 log = logging.getLogger(__name__)
 
@@ -24,6 +26,7 @@ class TestMUDServer(unittest.TestCase):
             db=0,
             decode_responses=True,
         )
+        self.redis.flushdb()
 
     def test_command_protocol_connect(self):
         # Test protocol_connect command
@@ -37,6 +40,24 @@ class TestMUDServer(unittest.TestCase):
         self.assertFalse(data["error"])
         self.assertIn("instructions", data.keys())
 
+        self.assertEqual(
+            len(json.loads(self.redis.get(f"{self.world_id}:users"))), 1
+        )
+
+        response2 = self.app.post(
+            "/command",
+            data=json.dumps({"command": "protocol_connect"}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertFalse(data["error"])
+        self.assertIn("instructions", data.keys())
+
+        self.assertEqual(
+            len(json.loads(self.redis.get(f"{self.world_id}:users"))), 2
+        )
+
     # def test_command_invalid_command(self):
     #     # Connect to the server first
     #     response = self.app.post(
@@ -44,10 +65,16 @@ class TestMUDServer(unittest.TestCase):
     #         data=json.dumps({"command": "protocol_connect"}),
     #         content_type="application/json",
     #     )
-    #     response = self.app.get(
+    #     self.assertEqual(
+    #         len(json.loads(self.redis.get(f"{self.world_id}:users"))), 1
+    #     )
+    #     response2 = self.app.get(
     #         "/users",
     #         content_type="application/json",
     #     )
+    #     import pdb
+
+    #     pdb.set_trace()
     #     # Test an invalid command
     #     response = self.app.post(
     #         "/command",

@@ -1,15 +1,23 @@
 import argparse
 import logging
 
+import redis
 import yaml
-from flask import Flask, request, jsonify, g
+from flask import Flask, g, jsonify, request
 
+from . import settings
 from .interpreter import Interpreter
 from .user import User
 from .world import World
-from . import settings
 
 log = logging.getLogger(__name__)
+
+r = redis.StrictRedis(
+    host=settings.REDIS_HOST,
+    port=settings.REDIS_PORT,
+    db=0,
+    decode_responses=True,
+)
 
 
 class MUDServer:
@@ -17,6 +25,9 @@ class MUDServer:
         self.world = world
 
     def handle_command(self, user_id, command, command_args=None):
+        log.debug(
+            f"Handling command {command} for user {user_id} with args {command_args}"
+        )
         if not user_id:
             user = User(f"User_{len(self.world.get_users()) + 1}")
             self.world.add_user(user.id, user)
@@ -43,7 +54,8 @@ def create_app(config=None):
     @app.before_request
     def before_request():
         if not hasattr(g, "server"):
-            world = World(config)
+            world = World(config, r)
+            g.world_id = world.id
             g.server = MUDServer(world)
 
     @app.route("/command", methods=["POST"])
@@ -63,7 +75,7 @@ def create_app(config=None):
 
     @app.route("/users", methods=["GET"])
     def users():
-        return {"users": list(g.server.world.get_users())}
+        users = r.get(f"{g.world_id}:users")
 
     return app
 
