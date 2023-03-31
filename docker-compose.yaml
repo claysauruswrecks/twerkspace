@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  redis:
+    image: redis:latest
+    restart: "unless-stopped"
+    command: "redis-server --save '' --appendonly no"
+    ports:
+     - 127.0.0.1:6379:6379
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=redis
+    ports:
+      - 127.0.0.1:8081:8081
+    depends_on:
+      - redis
+
+  flask:
+    build:
+      context: ./
+      dockerfile: ./docker/base.Dockerfile
+    command: "flask --app twerkspace run"
+    depends_on:
+      - redis
+      - redis-commander
+    image: twerkspace:latest

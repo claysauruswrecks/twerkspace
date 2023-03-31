@@ -10,3 +10,6 @@ CONFIG_PATH = os.path.join(ROOT_DIR, CONFIG_DIR)
 PROMPT_PATH = os.path.join(ROOT_DIR, PROMPT_DIR)
 
 PROTOCOL = "GPT-3.5"
+
+REDIS_HOST = os.environ.get("REDIS_HOST", "redis")
+REDIS_PORT = os.environ.get("REDIS_PORT", "6379")

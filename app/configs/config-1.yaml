@@ -1,3 +1,4 @@
+# world_id: uuid4()  # optional override
 room:
   id: 1
   name: The Enchanted Forest

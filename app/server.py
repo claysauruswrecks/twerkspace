@@ -4,10 +4,10 @@ import logging
 import yaml
 from flask import Flask, request, jsonify, g
 
-from app.interpreter import Interpreter
-from app.user import User
-from app.world import World
-from app import settings
+from .interpreter import Interpreter
+from .user import User
+from .world import World
+from . import settings
 
 log = logging.getLogger(__name__)
 
@@ -16,14 +16,17 @@ class MUDServer:
     def __init__(self, world):
         self.world = world
 
-    def handle_command(self, user_id, command, args=None):
+    def handle_command(self, user_id, command, command_args=None):
         if not user_id:
-            user = User(user_id, f"User_{len(self.world.users) + 1}")
-            self.world.add_user(user_id, user)
+            user = User(f"User_{len(self.world.get_users()) + 1}")
+            self.world.add_user(user.id, user)
         else:
             user = self.world.get_user(user_id)
+            if not user:
+                log.error(f"User {user_id} not found")
+                return {"error": f"User {user_id} not found, please connect"}
         interpreter = Interpreter(self.world, user)
-        return interpreter.process_command(command, args)
+        return interpreter.process_command(command, command_args)
 
 
 def load_config(config_path):
@@ -40,9 +43,7 @@ def create_app(config=None):
     @app.before_request
     def before_request():
         if not hasattr(g, "server"):
-            initial_room = config["room"]
-            initial_objects = config.get("objects")
-            world = World(initial_room, initial_objects)
+            world = World(config)
             g.server = MUDServer(world)
 
     @app.route("/command", methods=["POST"])
@@ -59,6 +60,10 @@ def create_app(config=None):
             response = {"error": str(e)}
 
         return response
+
+    @app.route("/users", methods=["GET"])
+    def users():
+        return {"users": list(g.server.world.get_users())}
 
     return app
 

@@ -1,4 +1,7 @@
-black
-isort
 flask
 pyyaml
+redis
+
+# dev
+black
+isort

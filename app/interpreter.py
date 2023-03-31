@@ -1,6 +1,6 @@
 import json
 import logging
-from app import settings
+from . import settings
 
 log = logging.getLogger(__name__)
 
@@ -39,15 +39,15 @@ class Interpreter:
 
     def whisper(self, args):
         to_user, message = args.split(" ", 1)
-        log.debug(f"Whispering {self.user.name} => {to_user}: {message}")
-        self.world.send_message(self.user.name, to_user, message)
+        log.debug(f"Whispering {self.user.id} => {to_user}: {message}")
+        self.world.send_message(self.user.id, to_user, message)
 
     def say(self, args):
         message = args
         log.debug(
-            f"Sending message {self.user.name} => {self.world.id}: {message}"
+            f"Sending message {self.user.id} => {self.world.id}: {message}"
         )
-        self.world.broadcast_message(self.user.name, message)
+        self.world.broadcast_message(self.user.id, message)
         log.debug("Done sending message")
 
     def protocol_connect(self, args=None):
@@ -57,9 +57,9 @@ class Interpreter:
         return response
 
     def protocol_disconnect(self, args=None):
-        log.debug(f"User {self.user.name} disconnecting")
+        log.debug(f"User {self.user.id} disconnecting")
         response = self.world.remove_user(self.user.user_id)
-        log.debug(f"User {self.user.name} disconnected")
+        log.debug(f"User {self.user.id} disconnected")
         if response:
             return dict(error=False)
 
@@ -111,14 +111,14 @@ class Interpreter:
         log.debug("Done hydrating")
         return response
 
-    def process_command(self, command, args=None):
+    def process_command(self, command, command_args=None):
         response = {}
         response["error"] = False
         try:
-            log.info(f"Received command: {command, args}")
+            log.info(f"Received command: {command, command_args}")
             if command in self.commands:
                 log.info(f"Executing command: {command}")
-                response = self.commands[command](args)
+                response = self.commands[command](command_args)
                 if response is None:
                     response = self.look()
             else:
@@ -130,12 +130,3 @@ class Interpreter:
         # add user status to every successful response
         response["self"] = self.user.status
         return json.dumps(response)
-
-    def run(self):
-        while True:
-            log.info(f"User: {self.user} waiting for command")
-            command = input(f"{self.user.name}> ").strip().lower()
-            if command == "quit":
-                log.info(f"User {self.user.name} quitting")
-                break
-            self.process_command(command)
