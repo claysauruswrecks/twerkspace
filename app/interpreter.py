@@ -14,6 +14,7 @@ class Interpreter:
             "look": self.look,
             "inspect": self.inspect,
             "protocol_connect": self.protocol_connect,
+            "protocol_disconnect": self.protocol_disconnect,
             "say": self.say,
             "whisper": self.whisper,
         }
@@ -55,6 +56,13 @@ class Interpreter:
         log.debug("Done sending connection prompt")
         return response
 
+    def protocol_disconnect(self, args=None):
+        log.debug(f"User {self.user.name} disconnecting")
+        response = self.world.remove_user(self.user.user_id)
+        log.debug(f"User {self.user.name} disconnected")
+        if response:
+            return dict(error=False)
+
     def return_prompt(self, prompt_id):
         log.debug(f"Returning prompt: {prompt_id}")
         with open(
@@ -95,6 +103,7 @@ class Interpreter:
             response["user_ids"] = [u.name for u in self.world.users.values()]
             log.debug("Looking for objects")
             response["object_ids"] = self.world.display_objects()
+            log.debug("Looking for messages")
             response["messages"] = self.world.display_messages()
         except Exception as e:
             log.error(e)

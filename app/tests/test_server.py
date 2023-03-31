@@ -40,6 +40,17 @@ class TestMUDServer(unittest.TestCase):
         self.assertTrue(data["error"])
         self.assertIn("Unknown command", data["error"])
 
+    def test_command_protocol_disconnect(self):
+        # Test protocol_disconnect command
+        response = self.app.post(
+            "/command",
+            data=json.dumps({"command": "protocol_disconnect"}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertFalse(data["error"])
+
 
 if __name__ == "__main__":
     unittest.main()

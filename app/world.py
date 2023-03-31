@@ -62,6 +62,7 @@ class World:
         user = self.users[user_id]
         del self.users_by_name[user.name.lower()]
         del self.users[user_id]
+        return True
 
     def set_room(self, room):
         log.debug(f"Setting room {room}")
